@@ -32,29 +32,35 @@ function createFile() {
   const folderWithSizePath = `${resultFolderPath}/${folderName}`;
   fs.mkdirSync(folderWithSizePath);
 
-  const stringLength = GB_1 * gigabyte + MB_1 * megabytes + KB_1 * kilobytes;
-
   const SAFE_STRING_SIZE_MB = getSafeStringSize(safe_string_length_size_mb, MB_1);
 
-  const writeStream = fs.createWriteStream(
-    `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.txt`
-  );
+  const stringLength = GB_1 * gigabyte + MB_1 * megabytes + KB_1 * kilobytes;
 
-  const safeLoop = Math.floor(stringLength / SAFE_STRING_SIZE_MB);
+  const amountOfFiles = Math.ceil(stringLength / GB_1);
 
-  for (let i = 0; i < safeLoop + 1; i++) {
-    let fileText = '';
+  for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
+    const writeStream = fs.createWriteStream(
+      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.a`
+    );
 
-    if (i === safeLoop) {
-      fileText = TEXT.repeat(stringLength - SAFE_STRING_SIZE_MB * safeLoop);
-    } else {
-      fileText = TEXT.repeat(SAFE_STRING_SIZE_MB);
+    const currentLength =
+      fileNumber === amountOfFiles ? stringLength - GB_1 * (fileNumber - 1) : GB_1;
+    const safeLoop = Math.ceil(currentLength / SAFE_STRING_SIZE_MB);
+
+    for (let writeFileNumber = 1; writeFileNumber <= safeLoop; writeFileNumber++) {
+      let fileText = '';
+
+      if (writeFileNumber === safeLoop) {
+        fileText = TEXT.repeat(currentLength - SAFE_STRING_SIZE_MB * (safeLoop - 1));
+      } else {
+        fileText = TEXT.repeat(SAFE_STRING_SIZE_MB);
+      }
+
+      writeStream.write(fileText);
     }
 
-    writeStream.write(fileText);
+    writeStream.end();
   }
-
-  writeStream.end();
 
   console.log(`\nYour folder "${folderName}" was successfully created!\n`);
 }
