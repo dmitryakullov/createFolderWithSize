@@ -1,0 +1,11 @@
+{
+  "name": "crate-folder-with-size",
+  "version": "1.0.0",
+  "description": "You can create a folder with the size which you need",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "Dmitry Akulov",
+  "license": "ISC"
+}
