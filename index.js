@@ -40,7 +40,7 @@ function createFile() {
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
-      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.a`
+      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.txt`
     );
 
     const currentLength =
