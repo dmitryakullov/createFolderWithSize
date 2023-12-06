@@ -1,20 +1,29 @@
-function createFileName(gb, mb, kb) {
-  let fileName = '';
-  if (gb) {
-    fileName += `${gb}GB_`;
-  }
-  if (mb) {
-    fileName += `${mb}MB_`;
-  }
-  if (kb) {
-    fileName += `${kb}KB_`;
-  }
+const DEFAULT_SAFE_SIZE = 150;
 
-  if (!fileName.length) {
-    fileName = 'empty_';
-  }
-
-  return fileName;
+function getSafeStringSize(safeLength, mb1) {
+  return !safeLength || safeLength > 500 || safeLength < 10 || typeof safeLength !== 'number'
+    ? DEFAULT_SAFE_SIZE * mb1
+    : safeLength * mb1;
 }
 
-module.exports = { createFileName };
+function createFolderName(gb, mb, kb) {
+  let folderName = '';
+  if (gb) {
+    folderName += `${gb}GB_`;
+  }
+  if (mb) {
+    folderName += `${mb}MB_`;
+  }
+  if (kb) {
+    folderName += `${kb}KB_`;
+  }
+
+  if (!folderName.length) {
+    folderName = 'empty_';
+  }
+
+  folderName += 'size';
+  return folderName;
+}
+
+module.exports = { createFolderName, getSafeStringSize, DEFAULT_SAFE_SIZE };

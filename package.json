@@ -7,5 +7,10 @@
     "start": "node ./index.js"
   },
   "author": "Dmitry Akulov",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0"
+  }
 }

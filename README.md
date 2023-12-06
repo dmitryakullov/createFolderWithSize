@@ -2,8 +2,13 @@ You must have NODE JS installed!
 
 Instruction how to create file with size.
 
-1) fill `config.json` with required sizes
+1. Fill `config.json` with required folder sizes
 
-2) run in console `npm start`
+2. Open console in this directory and run `npm start`
 
-3) file with the required size will be created in the folder `file`
+3. Wait for the `Your file was successfully created!` message in the console
+
+4. Folder with the required size will be created in the `/result` folder
+
+NOTE: If you encounter an `RangeError: Invalid string length` error in the console,
+then reduce the `"safe_string_length_size_mb"` property in the `config.json`
