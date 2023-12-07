@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { createFolderName, getSafeStringSize, DEFAULT_SAFE_SIZE } = require('./utils');
 
+const startTime = performance.now();
+
 const resultFolderPath = `${__dirname}/result`;
 
 const KB_1 = 1024;
@@ -62,5 +64,9 @@ function createFile() {
     writeStream.end();
   }
 
-  console.log(`\nYour folder "${folderName}" was successfully created!\n`);
+  const endTime = performance.now();
+
+  console.log(
+    `\nYour folder "${folderName}" was successfully created!\n${endTime - startTime}ms\n`
+  );
 }
