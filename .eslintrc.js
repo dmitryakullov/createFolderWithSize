@@ -30,5 +30,6 @@ module.exports = {
     'comma-dangle': NO_ERROR,
     'object-curly-newline': NO_ERROR,
     'no-await-in-loop': NO_ERROR,
+    'max-len': ['error', { code: 100 }],
   },
 };

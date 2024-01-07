@@ -35,7 +35,7 @@ async function createFile() {
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
-      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.txt`
+      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.q`
     );
 
     const currentLength =
@@ -67,9 +67,9 @@ async function createFile() {
 
   const endTime = performance.now();
 
+  const tookTime = Math.round(endTime - startTime) / 1000;
+
   console.log(
-    `\nYour folder "${folderName}" was successfully created!\n${Math.round(
-      endTime - startTime
-    )} milliseconds\n`
+    `\n\n\n${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
   );
 }
