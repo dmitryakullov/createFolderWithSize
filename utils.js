@@ -1,4 +1,4 @@
-const DEFAULT_SAFE_SIZE = 150;
+const { DEFAULT_SAFE_SIZE } = require('./constants');
 
 function getSafeStringSize(safeLength, mb1) {
   return !safeLength || safeLength > 500 || safeLength < 10 || typeof safeLength !== 'number'
@@ -26,4 +26,14 @@ function createFolderName(gb, mb, kb) {
   return folderName;
 }
 
-module.exports = { createFolderName, getSafeStringSize, DEFAULT_SAFE_SIZE };
+function pause(num) {
+  return new Promise((res) => {
+    setTimeout(() => res(''), num);
+  });
+}
+
+module.exports = {
+  createFolderName,
+  getSafeStringSize,
+  pause,
+};

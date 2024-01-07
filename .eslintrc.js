@@ -1,3 +1,5 @@
+const NO_ERROR = 0;
+
 module.exports = {
   env: {
     browser: true,
@@ -19,12 +21,14 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-    'linebreak-style': 0,
-    camelcase: 0,
-    'no-use-before-define': 0,
-    'operator-linebreak': 0,
-    'no-plusplus': 0,
-    'no-console': 0,
-    'comma-dangle': 0,
+    'linebreak-style': NO_ERROR,
+    camelcase: NO_ERROR,
+    'no-use-before-define': NO_ERROR,
+    'operator-linebreak': NO_ERROR,
+    'no-plusplus': NO_ERROR,
+    'no-console': NO_ERROR,
+    'comma-dangle': NO_ERROR,
+    'object-curly-newline': NO_ERROR,
+    'no-await-in-loop': NO_ERROR,
   },
 };

@@ -1,6 +1,5 @@
 {
   "gigabyte": 0,
-  "megabytes": 0,
-  "kilobytes": 0,
-  "safe_string_length_size_mb": 200
+  "megabytes": 100,
+  "kilobytes": 0
 }

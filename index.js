@@ -1,14 +1,10 @@
 const fs = require('fs');
-const { createFolderName, getSafeStringSize, DEFAULT_SAFE_SIZE } = require('./utils');
+const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
+const { createFolderName, getSafeStringSize, pause } = require('./utils');
 
 const startTime = performance.now();
 
 const resultFolderPath = `${__dirname}/result`;
-
-const KB_1 = 1024;
-const MB_1 = 1024 * KB_1;
-const GB_1 = 1024 * MB_1;
-const TEXT = 'A';
 
 if (fs.existsSync(resultFolderPath)) {
   fs.rm(resultFolderPath, { recursive: true, force: true }, () => {
@@ -18,27 +14,24 @@ if (fs.existsSync(resultFolderPath)) {
   createFile();
 }
 
-function createFile() {
+async function createFile() {
   fs.mkdirSync(resultFolderPath);
 
   const configData = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, 'utf8'));
-  const {
-    gigabyte = 0,
-    megabytes = 0,
-    kilobytes = 0,
-    safe_string_length_size_mb = DEFAULT_SAFE_SIZE,
-  } = configData;
+  const { gigabyte = 0, megabytes = 0, kilobytes = 0 } = configData;
 
   const folderName = createFolderName(gigabyte, megabytes, kilobytes);
 
   const folderWithSizePath = `${resultFolderPath}/${folderName}`;
   fs.mkdirSync(folderWithSizePath);
 
-  const SAFE_STRING_SIZE_MB = getSafeStringSize(safe_string_length_size_mb, MB_1);
+  const SAFE_STRING_SIZE_MB = getSafeStringSize(DEFAULT_SAFE_SIZE, MB_1);
 
   const stringLength = GB_1 * gigabyte + MB_1 * megabytes + KB_1 * kilobytes;
 
   const amountOfFiles = Math.ceil(stringLength / GB_1);
+
+  console.log('The folder creation process has started.');
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
@@ -59,6 +52,14 @@ function createFile() {
       }
 
       writeStream.write(fileText);
+
+      await pause(100);
+    }
+
+    await pause(1500);
+
+    if (!(fileNumber % 4)) {
+      console.log('Work in progress...');
     }
 
     writeStream.end();
@@ -67,6 +68,8 @@ function createFile() {
   const endTime = performance.now();
 
   console.log(
-    `\nYour folder "${folderName}" was successfully created!\n${endTime - startTime}ms\n`
+    `\nYour folder "${folderName}" was successfully created!\n${Math.round(
+      endTime - startTime
+    )} milliseconds\n`
   );
 }
