@@ -56,13 +56,15 @@ async function createFile() {
       await pause(100);
     }
 
-    await pause(1500);
+    await pause(1000);
 
     if (!(fileNumber % 4)) {
       console.log('Work in progress...');
     }
 
     writeStream.end();
+
+    await pause(1000);
   }
 
   const endTime = performance.now();
