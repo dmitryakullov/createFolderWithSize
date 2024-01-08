@@ -53,13 +53,15 @@ async function createFile() {
 
       writeStream.write(fileText);
 
-      await pause(100);
+      await pause(300);
     }
 
-    await pause(1000);
+    await pause(2000);
 
-    if (!(fileNumber % 4)) {
-      console.log('Work in progress...');
+    const messageAfterCreationFiles = 4;
+    if (fileNumber % messageAfterCreationFiles === 0) {
+      const createdPercentage = Math.round((100 / amountOfFiles) * fileNumber);
+      console.log(`${createdPercentage}% Created...`);
     }
 
     writeStream.end();
