@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
-const { createFolderName, getSafeStringSize, pause } = require('./utils');
+const { createFolderName, getSafeStringSize } = require('./utils');
 
 const startTime = performance.now();
 
@@ -8,13 +8,13 @@ const resultFolderPath = `${__dirname}/result`;
 
 if (fs.existsSync(resultFolderPath)) {
   fs.rm(resultFolderPath, { recursive: true, force: true }, () => {
-    createFile();
+    createFolder();
   });
 } else {
-  createFile();
+  createFolder();
 }
 
-async function createFile() {
+function createFolder() {
   fs.mkdirSync(resultFolderPath);
 
   const configData = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, 'utf8'));
@@ -33,7 +33,7 @@ async function createFile() {
 
   console.log('The folder creation process has started.');
 
-  for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
+  const createFile = (fileNumber = 1) => {
     const writeStream = fs.createWriteStream(
       `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.q`
     );
@@ -42,7 +42,7 @@ async function createFile() {
       fileNumber === amountOfFiles ? stringLength - GB_1 * (fileNumber - 1) : GB_1;
     const safeLoop = Math.ceil(currentLength / SAFE_STRING_SIZE_MB);
 
-    for (let writeFileNumber = 1; writeFileNumber <= safeLoop; writeFileNumber++) {
+    const writeStringInFile = (writeFileNumber = 1) => {
       let fileText = '';
 
       if (writeFileNumber === safeLoop) {
@@ -51,29 +51,48 @@ async function createFile() {
         fileText = TEXT.repeat(SAFE_STRING_SIZE_MB);
       }
 
-      writeStream.write(fileText);
+      writeStream.write(fileText, (error) => {
+        if (error) {
+          throw new Error('An error has occurred!');
+        }
 
-      await pause(300);
-    }
+        const nextWriteFileNumber = writeFileNumber + 1;
 
-    await pause(2000);
+        if (nextWriteFileNumber <= safeLoop) {
+          writeStringInFile(nextWriteFileNumber);
 
-    const messageAfterCreationFiles = 4;
-    if (fileNumber % messageAfterCreationFiles === 0) {
-      const createdPercentage = Math.round((100 / amountOfFiles) * fileNumber);
-      console.log(`${createdPercentage}% Created...`);
-    }
+          return;
+        }
 
-    writeStream.end();
+        const messageAfterCreationFiles = 3;
+        if (fileNumber % messageAfterCreationFiles === 0) {
+          const createdPercentage = Math.round((100 / amountOfFiles) * fileNumber);
+          console.log(`${createdPercentage}% Created...`);
+        }
 
-    await pause(1000);
-  }
+        writeStream.end(() => {
+          const nextFileNumber = fileNumber + 1;
 
-  const endTime = performance.now();
+          if (nextFileNumber <= amountOfFiles) {
+            createFile(nextFileNumber);
 
-  const tookTime = Math.round(endTime - startTime) / 1000;
+            return;
+          }
 
-  console.log(
-    `\n\n\n${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
-  );
+          const endTime = performance.now();
+
+          const tookTime = Math.round(endTime - startTime) / 1000;
+
+          console.log(
+            /* eslint-disable max-len */
+            `\n\n\nTook ${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
+          );
+        });
+      });
+    };
+
+    writeStringInFile();
+  };
+
+  createFile();
 }

@@ -1,4 +1,4 @@
-const DEFAULT_SAFE_SIZE = 100;
+const DEFAULT_SAFE_SIZE = 250;
 
 const KB_1 = 1024;
 const MB_1 = 1024 * KB_1;

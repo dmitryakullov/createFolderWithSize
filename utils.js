@@ -26,14 +26,7 @@ function createFolderName(gb, mb, kb) {
   return folderName;
 }
 
-function pause(num) {
-  return new Promise((res) => {
-    setTimeout(() => res(''), num);
-  });
-}
-
 module.exports = {
   createFolderName,
   getSafeStringSize,
-  pause,
 };
