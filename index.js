@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
-const { createFolderName, getSafeStringSize } = require('./utils');
+const { createFolderName, getSafeStringSize, log } = require('./utils');
 
 const startTime = performance.now();
 
@@ -15,6 +15,8 @@ if (fs.existsSync(resultFolderPath)) {
 }
 
 async function createFile() {
+  log.start();
+
   fs.mkdirSync(resultFolderPath);
 
   const configData = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, 'utf8'));
@@ -30,8 +32,6 @@ async function createFile() {
   const stringLength = GB_1 * gigabyte + MB_1 * megabytes + KB_1 * kilobytes;
 
   const amountOfFiles = Math.ceil(stringLength / GB_1);
-
-  console.log('The folder creation process has started.');
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
@@ -53,20 +53,14 @@ async function createFile() {
 
       await new Promise((res) => {
         writeStream.write(fileText, (error) => {
-          if (error) {
-            throw new Error(error);
-          }
+          if (error) throw new Error(error);
 
           res();
         });
       });
     }
 
-    const messageAfterCreationFiles = 4;
-    if (fileNumber % messageAfterCreationFiles === 0) {
-      const createdPercentage = Math.round((100 / amountOfFiles) * fileNumber);
-      console.log(`${createdPercentage}% Created...`);
-    }
+    log.progress(fileNumber, amountOfFiles);
 
     await new Promise((res) => {
       writeStream.end(() => res());
@@ -75,9 +69,5 @@ async function createFile() {
 
   const endTime = performance.now();
 
-  const tookTime = Math.round(endTime - startTime) / 1000;
-
-  console.log(
-    `\n\n\nTook ${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
-  );
+  log.end(startTime, endTime, folderName);
 }
