@@ -1,4 +1,6 @@
-You must have NODE JS installed!
+### This application will allow you to create a folder with the size you need
+
+##### You must have [NODE JS](https://nodejs.org/en) installed!
 
 Instruction on how to create file with specific size.
 
