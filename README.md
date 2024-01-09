@@ -2,7 +2,7 @@ You must have NODE JS installed!
 
 Instruction how to create file with size.
 
-1. Fill `config.json` with required folder sizes
+1. Fill `config.json` with required folder sizes and save file
 
 2. Open console in this directory and run `npm start`
 

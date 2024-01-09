@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
-const { createFolderName, getSafeStringSize, pause } = require('./utils');
+const { createFolderName, getSafeStringSize } = require('./utils');
 
 const startTime = performance.now();
 
@@ -51,12 +51,16 @@ async function createFile() {
         fileText = TEXT.repeat(SAFE_STRING_SIZE_MB);
       }
 
-      writeStream.write(fileText);
+      await new Promise((res) => {
+        writeStream.write(fileText, (error) => {
+          if (error) {
+            throw new Error(error);
+          }
 
-      await pause(300);
+          res();
+        });
+      });
     }
-
-    await pause(2000);
 
     const messageAfterCreationFiles = 4;
     if (fileNumber % messageAfterCreationFiles === 0) {
@@ -64,9 +68,9 @@ async function createFile() {
       console.log(`${createdPercentage}% Created...`);
     }
 
-    writeStream.end();
-
-    await pause(1000);
+    await new Promise((res) => {
+      writeStream.end(() => res());
+    });
   }
 
   const endTime = performance.now();
@@ -74,6 +78,6 @@ async function createFile() {
   const tookTime = Math.round(endTime - startTime) / 1000;
 
   console.log(
-    `\n\n\n${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
+    `\n\n\nTook ${tookTime} seconds\n\nYour folder "${folderName}" was successfully created!\n`
   );
 }
