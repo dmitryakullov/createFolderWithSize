@@ -36,8 +36,13 @@ async function createFile() {
   const amountOfFiles = Math.ceil(stringLength / GB_1);
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
+    const innerFolderForFiles = path.join(folderWithSizePath, `f${Math.ceil(fileNumber / 5)}`);
+    if (!fs.existsSync(innerFolderForFiles)) {
+      fs.mkdirSync(innerFolderForFiles);
+    }
+
     const writeStream = fs.createWriteStream(
-      path.join(folderWithSizePath, `/${Number(`${Math.random()}`.slice(2)).toString(32)}.q`)
+      path.join(innerFolderForFiles, `/${Number(`${Math.random()}`.slice(2)).toString(32)}.q`)
     );
 
     const currentLength =
