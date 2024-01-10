@@ -37,7 +37,7 @@ async function createFile() {
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
-      path.join(folderWithSizePath, `/${Math.round(Math.random() * 10000000)}_file.q`)
+      path.join(folderWithSizePath, `/${Number(`${Math.random()}`.slice(2)).toString(32)}.q`)
     );
 
     const currentLength =
