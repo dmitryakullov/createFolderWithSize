@@ -27,7 +27,7 @@ function createFolderName(gb, mb, kb) {
 }
 
 const log = {
-  start: () => console.log('The folder creation process has started.'),
+  start: () => console.log('The folder creation process has started'),
   progress: (fileNumber, amountOfFiles) => {
     const messageAfterCreationFiles = 4;
 

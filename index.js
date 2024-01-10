@@ -21,7 +21,16 @@ async function createFile() {
 
   fs.mkdirSync(resultFolderPath);
 
-  const configData = JSON.parse(fs.readFileSync(path.join(__dirname, '/config.json'), 'utf8'));
+  let configData;
+  try {
+    configData = JSON.parse(fs.readFileSync(path.join(__dirname, '/config.json'), 'utf8'));
+  } catch (error) {
+    console.error(
+      `\nError!\nPlease, correct the "config.json" file format.\nError message: ${error}`
+    );
+
+    return;
+  }
   const { gigabyte = 0, megabytes = 0, kilobytes = 0 } = configData;
 
   const folderName = createFolderName(gigabyte, megabytes, kilobytes);
