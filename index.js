@@ -1,10 +1,12 @@
 const fs = require('fs');
+const path = require('path');
+
 const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
 const { createFolderName, getSafeStringSize, log } = require('./utils');
 
 const startTime = performance.now();
 
-const resultFolderPath = `${__dirname}/result`;
+const resultFolderPath = path.join(__dirname, '/result');
 
 if (fs.existsSync(resultFolderPath)) {
   fs.rm(resultFolderPath, { recursive: true, force: true }, () => {
@@ -19,12 +21,12 @@ async function createFile() {
 
   fs.mkdirSync(resultFolderPath);
 
-  const configData = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, 'utf8'));
+  const configData = JSON.parse(fs.readFileSync(path.join(__dirname, '/config.json'), 'utf8'));
   const { gigabyte = 0, megabytes = 0, kilobytes = 0 } = configData;
 
   const folderName = createFolderName(gigabyte, megabytes, kilobytes);
 
-  const folderWithSizePath = `${resultFolderPath}/${folderName}`;
+  const folderWithSizePath = path.join(resultFolderPath, folderName);
   fs.mkdirSync(folderWithSizePath);
 
   const SAFE_STRING_SIZE_MB = getSafeStringSize(DEFAULT_SAFE_SIZE, MB_1);
@@ -35,7 +37,7 @@ async function createFile() {
 
   for (let fileNumber = 1; fileNumber <= amountOfFiles; fileNumber++) {
     const writeStream = fs.createWriteStream(
-      `${folderWithSizePath}/${Math.round(Math.random() * 10000000)}_file.q`
+      path.join(folderWithSizePath, `/${Math.round(Math.random() * 10000000)}_file.q`)
     );
 
     const currentLength =
