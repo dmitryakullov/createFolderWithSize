@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT } = require('./constants');
+const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT_DATA } = require('./constants');
 const { createFolderName, getSafeStringSize, log } = require('./utils');
 
 const startTime = performance.now();
@@ -62,9 +62,9 @@ async function createFile() {
       let fileText = '';
 
       if (writeFileNumber === safeLoop) {
-        fileText = TEXT.repeat(currentLength - SAFE_STRING_SIZE_MB * (safeLoop - 1));
+        fileText = TEXT_DATA.repeat(currentLength - SAFE_STRING_SIZE_MB * (safeLoop - 1));
       } else {
-        fileText = TEXT.repeat(SAFE_STRING_SIZE_MB);
+        fileText = TEXT_DATA.repeat(SAFE_STRING_SIZE_MB);
       }
 
       await new Promise((res) => {
