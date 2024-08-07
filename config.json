@@ -1,5 +1,6 @@
 {
-  "gigabyte": 0,
+  "gigabyte": 6,
   "megabytes": 0,
-  "kilobytes": 0
+  "kilobytes": 0,
+  "removeResultFolder": false
 }

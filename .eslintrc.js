@@ -31,5 +31,6 @@ module.exports = {
     'object-curly-newline': NO_ERROR,
     'no-await-in-loop': NO_ERROR,
     'max-len': ['error', { code: 100 }],
+    'class-methods-use-this': NO_ERROR,
   },
 };

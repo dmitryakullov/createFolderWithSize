@@ -2,13 +2,26 @@ const fs = require('fs');
 const path = require('path');
 
 const { DEFAULT_SAFE_SIZE, KB_1, MB_1, GB_1, TEXT_DATA } = require('./constants');
-const { createFolderName, getSafeStringSize, log } = require('./utils');
+const { createFolderName, getSafeStringSize, LogInfo } = require('./utils');
 
-const startTime = performance.now();
+const log = new LogInfo();
 
 const resultFolderPath = path.join(__dirname, '/result');
 
-if (fs.existsSync(resultFolderPath)) {
+function getConfigData() {
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(path.join(__dirname, '/config.json'), 'utf8'));
+  } catch (error) {
+    log.configError(error);
+  }
+
+  return data;
+}
+
+const configData = getConfigData();
+
+if (!configData.removeResultFolder && fs.existsSync(resultFolderPath)) {
   fs.rm(resultFolderPath, { recursive: true, force: true }, () => {
     createFile();
   });
@@ -21,16 +34,6 @@ async function createFile() {
 
   fs.mkdirSync(resultFolderPath);
 
-  let configData;
-  try {
-    configData = JSON.parse(fs.readFileSync(path.join(__dirname, '/config.json'), 'utf8'));
-  } catch (error) {
-    console.error(
-      `\nError!\nPlease, correct the "config.json" file format.\nError message: ${error}`
-    );
-
-    return;
-  }
   const { gigabyte = 0, megabytes = 0, kilobytes = 0 } = configData;
 
   const folderName = createFolderName(gigabyte, megabytes, kilobytes);
@@ -83,7 +86,5 @@ async function createFile() {
     });
   }
 
-  const endTime = performance.now();
-
-  log.end(startTime, endTime, folderName);
+  log.finish(folderName);
 }
