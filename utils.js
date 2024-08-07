@@ -1,7 +1,7 @@
 const { DEFAULT_SAFE_SIZE } = require('./constants');
 
 function getSafeStringSize(safeLength, mb1) {
-  if (!safeLength || safeLength > 500 || safeLength < 10 || typeof safeLength !== 'number') {
+  if (!safeLength || safeLength > 500 || safeLength < 10) {
     return DEFAULT_SAFE_SIZE * mb1;
   }
   return safeLength * mb1;
@@ -58,7 +58,7 @@ class LogInfo {
 
   configError(error) {
     console.error(
-      `\nError!\nPlease, correct the "config.json" file format.\nError message: ${error}`
+      `\n\nERROR!\nPlease, correct the "config.json" file format.\nError message: ${error}\n\n`
     );
   }
 }
